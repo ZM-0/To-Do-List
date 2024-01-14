@@ -86,5 +86,15 @@ appliation.put("/api/tasks/:id", (request: express.Request, response: express.Re
     .catch(console.error);
 });
 
+// Deletes a task
+appliation.delete("/api/tasks/:id", (request: express.Request, response: express.Response): void => {
+    client
+    .query('DELETE FROM "TASK" WHERE "TASK_ID" = $1', [request.params.id])
+    .then((result: pg.QueryResult): void => {
+        response.end();
+    })
+    .catch(console.error);
+});
+
 
 appliation.listen(PORT, HOST, () => console.log(`Server listening at ${HOST}:${PORT}...`));
