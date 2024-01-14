@@ -75,4 +75,18 @@ appliation.delete("/api/tasks/:id", (request, response) => {
     })
         .catch(console.error);
 });
+// Creates a new task
+// Request body must contain the properties:
+// - name: string
+// - deadline: string
+// - description: string
+// - complete: boolean
+appliation.post("/api/tasks", (request, response) => {
+    client
+        .query('INSERT INTO "TASK" ("TASK_NAME", "TASK_DEADLINE", "TASK_DESCRIPTION", "TASK_COMPLETE") VALUES ($1, $2, $3, $4)', [request.body.name, request.body.deadline, request.body.description, request.body.complete])
+        .then((result) => {
+        response.end();
+    })
+        .catch(console.error);
+});
 appliation.listen(PORT, HOST, () => console.log(`Server listening at ${HOST}:${PORT}...`));
