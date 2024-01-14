@@ -25,6 +25,9 @@ await client.connect();
 // }
 // ====================================================================================================
 // Middleware
+appliation.use("/api", express.urlencoded({
+    extended: true
+}));
 appliation.use((request, response, next) => {
     console.log(`Received ${request.method} request for ${request.path}`);
     next();
@@ -46,6 +49,20 @@ appliation.get("/api/tasks/:id", (request, response) => {
         .query('SELECT * FROM "TASK" WHERE "TASK_ID" = $1', [request.params.id])
         .then((result) => {
         response.json(result.rows[0]);
+    })
+        .catch(console.error);
+});
+// Updates a task
+// Request body must contain the properties:
+// - name: string
+// - deadline: string
+// - description: string
+// - complete: boolean
+appliation.put("/api/tasks/:id", (request, response) => {
+    client
+        .query('UPDATE "TASK" SET "TASK_NAME" = $1, "TASK_DEADLINE" = $2, "TASK_DESCRIPTION" = $3, "TASK_COMPLETE" = $4 WHERE "TASK_ID" = $5', [request.body.name, request.body.deadline, request.body.description, request.body.complete, request.params.id])
+        .then((result) => {
+        response.end();
     })
         .catch(console.error);
 });
