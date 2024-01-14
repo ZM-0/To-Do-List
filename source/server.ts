@@ -48,8 +48,18 @@ appliation.use((request: express.Request, response: express.Response, next: expr
 appliation.get("/api/tasks", (request: express.Request, response: express.Response): void => {
     client
     .query('SELECT * FROM "TASK"')
-    .then((queryResult: pg.QueryResult): void => {
-        response.json(queryResult.rows);
+    .then((result: pg.QueryResult): void => {
+        response.json(result.rows);
+    })
+    .catch(console.error);
+});
+
+// Gets a particular task by its identifier
+appliation.get("/api/tasks/:id", (request: express.Request, response: express.Response): void => {
+    client
+    .query('SELECT * FROM "TASK" WHERE "TASK_ID" = $1', [request.params.id])
+    .then((result: pg.QueryResult): void => {
+        response.json(result.rows[0]);
     })
     .catch(console.error);
 });

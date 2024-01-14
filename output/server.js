@@ -35,8 +35,17 @@ appliation.use((request, response, next) => {
 appliation.get("/api/tasks", (request, response) => {
     client
         .query('SELECT * FROM "TASK"')
-        .then((queryResult) => {
-        response.json(queryResult.rows);
+        .then((result) => {
+        response.json(result.rows);
+    })
+        .catch(console.error);
+});
+// Gets a particular task by its identifier
+appliation.get("/api/tasks/:id", (request, response) => {
+    client
+        .query('SELECT * FROM "TASK" WHERE "TASK_ID" = $1', [request.params.id])
+        .then((result) => {
+        response.json(result.rows[0]);
     })
         .catch(console.error);
 });
