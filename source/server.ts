@@ -46,6 +46,16 @@ appliation.use((request: express.Request, response: express.Response, next: expr
 
 
 // ====================================================================================================
+// Front End Files
+
+appliation.get("/", (request: express.Request, response: express.Response): void => {
+    response.sendFile("index.html", {
+        root: path.join(directory, "../source")
+    });
+});
+
+
+// ====================================================================================================
 // API
 
 // Gets the list of tasks

@@ -33,6 +33,13 @@ appliation.use((request, response, next) => {
     next();
 });
 // ====================================================================================================
+// Front End Files
+appliation.get("/", (request, response) => {
+    response.sendFile("index.html", {
+        root: path.join(directory, "../source")
+    });
+});
+// ====================================================================================================
 // API
 // Gets the list of tasks
 appliation.get("/api/tasks", (request, response) => {
