@@ -48,10 +48,15 @@ appliation.use((request: express.Request, response: express.Response, next: expr
 // ====================================================================================================
 // Front End Files
 
-appliation.get("/", (request: express.Request, response: express.Response): void => {
-    response.sendFile("index.html", {
-        root: path.join(directory, "../source")
-    });
+// HTML, CSS, and image files
+appliation.get(["/", "/images/list-icon.png"], (request: express.Request, response: express.Response): void => {
+    const filename: string = "/" === request.path ? "index.html" : request.path;
+    response.sendFile(path.join(directory, "../source", filename));
+});
+
+// JavaScript files
+appliation.get(["/client.js"], (request: express.Request, response: express.Response): void => {
+    response.sendFile(path.join(directory, request.path));
 });
 
 

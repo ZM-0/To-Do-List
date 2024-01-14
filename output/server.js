@@ -34,10 +34,14 @@ appliation.use((request, response, next) => {
 });
 // ====================================================================================================
 // Front End Files
-appliation.get("/", (request, response) => {
-    response.sendFile("index.html", {
-        root: path.join(directory, "../source")
-    });
+// HTML, CSS, and image files
+appliation.get(["/", "/images/list-icon.png"], (request, response) => {
+    const filename = "/" === request.path ? "index.html" : request.path;
+    response.sendFile(path.join(directory, "../source", filename));
+});
+// JavaScript files
+appliation.get(["/client.js"], (request, response) => {
+    response.sendFile(path.join(directory, request.path));
 });
 // ====================================================================================================
 // API
