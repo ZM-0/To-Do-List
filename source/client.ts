@@ -7,7 +7,9 @@ interface Task {
 }
 
 const taskList: HTMLUListElement = document.querySelector("ul")!;
-const taskCount: HTMLHeadingElement = document.querySelector("header h2")!;
+const taskCountDisplay: HTMLHeadingElement = document.querySelector("header h2")!;
+
+let taskCount: number = 0;
 
 
 // ====================================================================================================
@@ -36,6 +38,7 @@ const getFormattedDeadline = function(deadline: Date): string {
  */
 const addTaskToDOM = function(task: Task): void {
     const listItem: HTMLLIElement = document.createElement("li");
+    listItem.setAttribute("id", `task-${task.TASK_ID}`);
     const deadline: Date = new Date(task.TASK_DEADLINE);
 
     listItem.innerHTML = `
@@ -45,11 +48,20 @@ const addTaskToDOM = function(task: Task): void {
         <p>${task.TASK_DESCRIPTION}</p>
         <button>Complete</button>
         <a href="#">Edit</a>
-        <button>Delete</button>
+        <button class="delete-button">Delete</button>
       </article>
     `;
 
     taskList.append(listItem);
+
+    const deleteButton: HTMLButtonElement = document.querySelector(`#task-${task.TASK_ID} .delete-button`)!;
+    deleteButton.addEventListener("click", (): void => {
+        fetch(`/api/tasks/${task.TASK_ID}`, { method: "DELETE" })
+        .then((response: Response): void => {
+            listItem.remove();
+            taskCountDisplay.innerText = `Count: ${--taskCount}`;
+        });
+    });
 }
 
 
@@ -57,7 +69,8 @@ fetch("/api/tasks")
 .then((response: Response): Promise<Task[]> => response.json())
 .then((tasks: Task[]): void => {
     console.log(tasks);
-    taskCount.innerText = `Count: ${tasks.length}`;
+    taskCount = tasks.length;
+    taskCountDisplay.innerText = `Count: ${taskCount}`;
 
     for (let i: number = 0; i < tasks.length; i++) {
         addTaskToDOM(tasks[i]);

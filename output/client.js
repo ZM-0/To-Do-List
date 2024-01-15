@@ -1,6 +1,7 @@
 "use strict";
 const taskList = document.querySelector("ul");
-const taskCount = document.querySelector("header h2");
+const taskCountDisplay = document.querySelector("header h2");
+let taskCount = 0;
 // ====================================================================================================
 // Task HTML Generation
 const MONTHS = [
@@ -23,6 +24,7 @@ const getFormattedDeadline = function (deadline) {
  */
 const addTaskToDOM = function (task) {
     const listItem = document.createElement("li");
+    listItem.setAttribute("id", `task-${task.TASK_ID}`);
     const deadline = new Date(task.TASK_DEADLINE);
     listItem.innerHTML = `
       <article>
@@ -31,16 +33,25 @@ const addTaskToDOM = function (task) {
         <p>${task.TASK_DESCRIPTION}</p>
         <button>Complete</button>
         <a href="#">Edit</a>
-        <button>Delete</button>
+        <button class="delete-button">Delete</button>
       </article>
     `;
     taskList.append(listItem);
+    const deleteButton = document.querySelector(`#task-${task.TASK_ID} .delete-button`);
+    deleteButton.addEventListener("click", () => {
+        fetch(`/api/tasks/${task.TASK_ID}`, { method: "DELETE" })
+            .then((response) => {
+            listItem.remove();
+            taskCountDisplay.innerText = `Count: ${--taskCount}`;
+        });
+    });
 };
 fetch("/api/tasks")
     .then((response) => response.json())
     .then((tasks) => {
     console.log(tasks);
-    taskCount.innerText = `Count: ${tasks.length}`;
+    taskCount = tasks.length;
+    taskCountDisplay.innerText = `Count: ${taskCount}`;
     for (let i = 0; i < tasks.length; i++) {
         addTaskToDOM(tasks[i]);
     }
