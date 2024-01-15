@@ -12,6 +12,22 @@ const nameDisplay: HTMLInputElement = document.querySelector("#name")!;
 const deadlineDisplay: HTMLInputElement = document.querySelector("#deadline")!;
 const descriptionDisplay: HTMLTextAreaElement = document.querySelector("#description")!;
 const completeDisplay: HTMLInputElement = document.querySelector("#complete")!;
+const saveButton: HTMLButtonElement = document.querySelector("form .save-button")!;
+
+// Save the updated task
+saveButton.addEventListener("click", (): void => {
+    const body: URLSearchParams = new URLSearchParams();
+    body.append("name", nameDisplay.value);
+
+    const deadline: Date = new Date(deadlineDisplay.value);
+    body.append("deadline", deadline.toISOString());
+
+    body.append("description", descriptionDisplay.value);
+    body.append("complete", completeDisplay.checked ? "true" : "false");
+
+    fetch(`/api/tasks/${editTaskID}`, { method: "PUT", body });
+    location.assign("/");
+});
 
 // Fetch and display the task to be edited in the form
 fetch(`/api/tasks/${editTaskID}`)
