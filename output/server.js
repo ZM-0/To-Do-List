@@ -35,7 +35,7 @@ appliation.use((request, response, next) => {
 // ====================================================================================================
 // Front End Files
 // HTML, CSS, and image files
-appliation.get(["/", "/create", "/edit", "/images/list-icon.png"], (request, response) => {
+appliation.get(["/", "/create", "/edit", "/styles.css", "/images/list-icon.png"], (request, response) => {
     const filename = (function () {
         switch (request.path) {
             case "/": return "index.html";

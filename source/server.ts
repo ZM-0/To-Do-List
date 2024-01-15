@@ -50,7 +50,7 @@ appliation.use((request: express.Request, response: express.Response, next: expr
 
 // HTML, CSS, and image files
 appliation.get(
-    ["/", "/create", "/edit", "/images/list-icon.png"],
+    ["/", "/create", "/edit", "/styles.css", "/images/list-icon.png"],
     (request: express.Request, response: express.Response): void => {
         const filename: string = (function(): string {
             switch (request.path) {

@@ -213,7 +213,7 @@ filterIncompleteButton.addEventListener("click", (): void => {
 fetch("/api/tasks")
 .then((response: Response): Promise<Task[]> => response.json())
 .then((tasks: Task[]): void => {
-    console.log(tasks);
+    // console.log(tasks);
     allTasks = tasks;
     drawTasks("all");
 });
