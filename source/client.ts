@@ -1,3 +1,6 @@
+// ====================================================================================================
+// Client Task Setup
+
 interface Task {
     TASK_ID: number,
     TASK_NAME: string,
@@ -6,10 +9,11 @@ interface Task {
     TASK_COMPLETE: boolean
 }
 
-const taskList: HTMLUListElement = document.querySelector("ul")!;
+const taskListDisplay: HTMLUListElement = document.querySelector("ul")!;
 const taskCountDisplay: HTMLHeadingElement = document.querySelector("header h2")!;
 
-let taskCount: number = 0;
+let allTasks: Task[];
+let displayFilter: string;
 
 
 // ====================================================================================================
@@ -33,67 +37,183 @@ const getFormattedDeadline = function(deadline: Date): string {
 }
 
 /**
- * Generates HTML for a task and adds it to the DOM.
- * @param task The task to add.
+ * Builds the complete button for the task display.
+ * @param index The task index in allTasks.
+ * @returns The DOM element for the complete button.
  */
-const addTaskToDOM = function(task: Task): void {
-    const listItem: HTMLLIElement = document.createElement("li");
-    listItem.setAttribute("id", `task-${task.TASK_ID}`);
-    const deadline: Date = new Date(task.TASK_DEADLINE);
+const buildCompleteButton = function(index: number): HTMLButtonElement {
+    const completeButton: HTMLButtonElement = document.createElement("button");
+    completeButton.innerText = allTasks[index].TASK_COMPLETE ? "Is Complete" : "Is Incomplete";
 
-    listItem.innerHTML = `
-      <article>
-        <h2>${task.TASK_NAME}</h2>
-        <h3>Deadline: <time datetime="${task.TASK_DEADLINE}">${getFormattedDeadline(deadline)}</time></h3>
-        <p>${task.TASK_DESCRIPTION}</p>
-        <button class="complete-button">Is ${task.TASK_COMPLETE ? "Complete" : "Incomplete"}</button>
-        <a href="/edit" class="edit-button">Edit</a>
-        <button class="delete-button">Delete</button>
-      </article>
-    `;
-
-    taskList.append(listItem);
-
-    const completeButton: HTMLButtonElement = document.querySelector(`#task-${task.TASK_ID} .complete-button`)!;
     completeButton.addEventListener("click", (): void => {
-        task.TASK_COMPLETE = !task.TASK_COMPLETE;
+        allTasks[index].TASK_COMPLETE = !allTasks[index].TASK_COMPLETE;
 
         const body: URLSearchParams = new URLSearchParams();
-        body.append("name", task.TASK_NAME);
-        body.append("deadline", task.TASK_DEADLINE);
-        body.append("description", task.TASK_DESCRIPTION);
-        body.append("complete", task.TASK_COMPLETE ? "true" : "false");
+        body.append("name", allTasks[index].TASK_NAME);
+        body.append("deadline", allTasks[index].TASK_DEADLINE);
+        body.append("description", allTasks[index].TASK_DESCRIPTION);
+        body.append("complete", allTasks[index].TASK_COMPLETE ? "true" : "false");
 
-        fetch(`/api/tasks/${task.TASK_ID}`, { method: "PUT", body })
+        fetch(`/api/tasks/${allTasks[index].TASK_ID}`, { method: "PUT", body })
         .then((response: Response): void => {
-            completeButton.innerText = task.TASK_COMPLETE ? "Is Complete" : "Is Incomplete";
+            drawTasks(displayFilter);
+            // completeButton.innerText = allTasks[index].TASK_COMPLETE ? "Is Complete" : "Is Incomplete";
         });
     });
 
-    const editButton: HTMLButtonElement = document.querySelector(`#task-${task.TASK_ID} .edit-button`)!;
-    editButton.addEventListener("click", (): void => {
-        sessionStorage.setItem("editTaskID", String(task.TASK_ID));
-    });
-
-    const deleteButton: HTMLButtonElement = document.querySelector(`#task-${task.TASK_ID} .delete-button`)!;
-    deleteButton.addEventListener("click", (): void => {
-        fetch(`/api/tasks/${task.TASK_ID}`, { method: "DELETE" })
-        .then((response: Response): void => {
-            listItem.remove();
-            taskCountDisplay.innerText = `Count: ${--taskCount}`;
-        });
-    });
+    return completeButton;
 }
+
+/**
+ * Builds the edit button for the task display.
+ * @param index The task index in allTasks.
+ * @returns The DOM element for the edit button.
+ */
+const buildEditButton = function(index: number): HTMLAnchorElement {
+    const editButton: HTMLAnchorElement = document.createElement("a");
+    editButton.href = "/edit";
+    editButton.innerText = "Edit";
+
+    editButton.addEventListener("click", (): void => {
+        sessionStorage.setItem("editTaskID", String(allTasks[index].TASK_ID));
+    });
+
+    return editButton;
+}
+
+/**
+ * Builds the delete button for the task display.
+ * @param index The task index in allTasks.
+ * @returns The DOM element for the delete button.
+ */
+const buildDeleteButton = function(index: number): HTMLButtonElement {
+    const deleteButton: HTMLButtonElement = document.createElement("button");
+    deleteButton.innerText = "Delete";
+
+    deleteButton.addEventListener("click", (): void => {
+        fetch(`/api/tasks/${allTasks[index].TASK_ID}`, { method: "DELETE" })
+        .then((response: Response): void => {
+            allTasks.splice(index, 1);
+            document.querySelector(`#task-${allTasks[index].TASK_ID}`)?.remove();
+            taskCountDisplay.innerText = `Count: ${allTasks.length}`;
+        });
+    });
+
+    return deleteButton;
+}
+
+/**
+ * Builds the title for the task display.
+ * @param index The task index in allTasks.
+ * @returns The DOM element for the title.
+ */
+const buildTitle = function(index: number): HTMLHeadingElement {
+    const title: HTMLHeadingElement = document.createElement("h2");
+    title.innerText = allTasks[index].TASK_NAME;
+    return title;
+}
+
+/**
+ * Builds the deadline for the task display.
+ * @param index The task index in allTasks.
+ * @returns The DOM element for the deadline.
+ */
+const buildDeadline = function(index: number): HTMLHeadingElement {
+    const deadline: HTMLHeadingElement = document.createElement("h3");
+    const time: HTMLTimeElement = document.createElement("time");
+    time.dateTime = allTasks[index].TASK_DEADLINE;
+    time.innerText = getFormattedDeadline(new Date(allTasks[index].TASK_DEADLINE));
+    deadline.append("Deadline: ", time);
+    return deadline;
+}
+
+/**
+ * Builds the description for the task display.
+ * @param index The task index in allTasks.
+ * @returns The DOM element for the description.
+ */
+const buildDescription = function(index: number): HTMLParagraphElement {
+    const description: HTMLParagraphElement = document.createElement("p");
+    description.innerText = allTasks[index].TASK_DESCRIPTION;
+    return description;
+}
+
+/**
+ * Generates HTML for a task and adds it to the DOM.
+ * @param index The index of the task to add in allTasks.
+ */
+const addTaskToDOM = function(index: number): void {
+    const listItem: HTMLLIElement = document.createElement("li");
+    listItem.setAttribute("id", `task-${allTasks[index].TASK_ID}`);
+
+    const article: HTMLElement = document.createElement("article");
+    article.append(
+        buildTitle(index),
+        buildDeadline(index),
+        buildDescription(index),
+        buildCompleteButton(index),
+        buildEditButton(index),
+        buildDeleteButton(index)
+    );
+
+    listItem.append(article);
+    taskListDisplay.append(listItem);
+}
+
+
+/**
+ * Draws the list of tasks on the page.
+ * @param filter Identifies which tasks to draw: "all", "complete", or "incomplete".
+ */
+const drawTasks = function(filter: string): void {
+    displayFilter = filter;
+    taskListDisplay.innerHTML = "";
+
+    switch (filter) {
+        case "all":
+            allTasks.forEach((task: Task, index: number): void => addTaskToDOM(index));
+            taskCountDisplay.innerText = `Count: ${allTasks.length}`;
+            break;
+        case "complete":
+            allTasks.forEach((task: Task, index: number): void => {
+                if (task.TASK_COMPLETE) addTaskToDOM(index);
+            });
+            taskCountDisplay.innerText = `Count: ${allTasks.filter((task: Task): boolean => task.TASK_COMPLETE).length}`;
+            break;
+        case "incomplete":
+            allTasks.forEach((task: Task, index: number): void => {
+                if (!task.TASK_COMPLETE) addTaskToDOM(index);
+            });
+            taskCountDisplay.innerText = `Count: ${allTasks.filter((task: Task): boolean => !task.TASK_COMPLETE).length}`;
+            break;
+    }
+}
+
+
+// ====================================================================================================
+// Task Filtering
+
+const filterAllButton: HTMLButtonElement = document.querySelector("#filter-all")!;
+const filterCompleteButton: HTMLButtonElement = document.querySelector("#filter-complete")!;
+const filterIncompleteButton: HTMLButtonElement = document.querySelector("#filter-incomplete")!;
+
+filterAllButton.addEventListener("click", (): void => {
+    drawTasks("all");
+});
+
+filterCompleteButton.addEventListener("click", (): void => {
+    drawTasks("complete");
+});
+
+filterIncompleteButton.addEventListener("click", (): void => {
+    drawTasks("incomplete");
+});
 
 
 fetch("/api/tasks")
 .then((response: Response): Promise<Task[]> => response.json())
 .then((tasks: Task[]): void => {
     console.log(tasks);
-    taskCount = tasks.length;
-    taskCountDisplay.innerText = `Count: ${taskCount}`;
-
-    for (let i: number = 0; i < tasks.length; i++) {
-        addTaskToDOM(tasks[i]);
-    }
+    allTasks = tasks;
+    drawTasks("all");
 });
