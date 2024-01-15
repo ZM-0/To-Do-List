@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="edit.js" async></script>
+    <title>Edit Task</title>
+  </head>
+  <body>
+    <header>
+      <h1>Edit Task</h1>
+    </header>
+    <main>
+      <!-- Need to use PUT, so action and method overridden in edit.js. -->
+      <form action="" method="">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required aria-required="true">
+        <label for="deadline">Deadline:</label>
+        <input type="datetime-local" id="deadline" name="deadline" required aria-required="true">
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"></textarea>
+        <input type="checkbox" id="complete" name="complete" value="true">
+        <label for="complete">Complete</label>
+        <a href="/">Cancel</a>
+        <button type="button">Save</button>
+      </form>
+    </main>
+  </body>
+</html>

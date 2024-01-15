@@ -47,12 +47,17 @@ const addTaskToDOM = function(task: Task): void {
         <h3>Deadline: <time datetime="${task.TASK_DEADLINE}">${getFormattedDeadline(deadline)}</time></h3>
         <p>${task.TASK_DESCRIPTION}</p>
         <button>Complete</button>
-        <a href="#">Edit</a>
+        <a href="/edit" class="edit-button">Edit</a>
         <button class="delete-button">Delete</button>
       </article>
     `;
 
     taskList.append(listItem);
+
+    const editButton: HTMLButtonElement = document.querySelector(`#task-${task.TASK_ID} .edit-button`)!;
+    editButton.addEventListener("click", (): void => {
+        sessionStorage.setItem("editTaskID", String(task.TASK_ID));
+    });
 
     const deleteButton: HTMLButtonElement = document.querySelector(`#task-${task.TASK_ID} .delete-button`)!;
     deleteButton.addEventListener("click", (): void => {

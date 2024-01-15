@@ -35,18 +35,19 @@ appliation.use((request, response, next) => {
 // ====================================================================================================
 // Front End Files
 // HTML, CSS, and image files
-appliation.get(["/", "/create", "/images/list-icon.png"], (request, response) => {
+appliation.get(["/", "/create", "/edit", "/images/list-icon.png"], (request, response) => {
     const filename = (function () {
         switch (request.path) {
             case "/": return "index.html";
-            case "/create": return "/create.html";
+            case "/create": return "create.html";
+            case "/edit": return "edit.html";
             default: return request.path;
         }
     })();
     response.sendFile(path.join(directory, "../source", filename));
 });
 // JavaScript files
-appliation.get(["/client.js"], (request, response) => {
+appliation.get(["/client.js", "/edit.js"], (request, response) => {
     response.sendFile(path.join(directory, request.path));
 });
 // ====================================================================================================
