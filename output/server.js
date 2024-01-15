@@ -97,12 +97,14 @@ appliation.delete("/api/tasks/:id", (request, response) => {
 // - name: string
 // - deadline: string
 // - description: string
-// - complete: boolean
+// And optionally:
+// - complete: boolean (defaults to false)
 appliation.post("/api/tasks", (request, response) => {
+    console.log(request.body);
     client
-        .query('INSERT INTO "TASK" ("TASK_NAME", "TASK_DEADLINE", "TASK_DESCRIPTION", "TASK_COMPLETE") VALUES ($1, $2, $3, $4)', [request.body.name, request.body.deadline, request.body.description, request.body.complete])
+        .query('INSERT INTO "TASK" ("TASK_NAME", "TASK_DEADLINE", "TASK_DESCRIPTION", "TASK_COMPLETE") VALUES ($1, $2, $3, $4)', [request.body.name, request.body.deadline, request.body.description, request.body.complete ?? "false"])
         .then((result) => {
-        response.end();
+        response.redirect("/");
     })
         .catch(console.error);
 });

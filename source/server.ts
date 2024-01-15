@@ -123,15 +123,17 @@ appliation.delete("/api/tasks/:id", (request: express.Request, response: express
 // - name: string
 // - deadline: string
 // - description: string
-// - complete: boolean
+// And optionally:
+// - complete: boolean (defaults to false)
 appliation.post("/api/tasks", (request: express.Request, response: express.Response): void => {
+    console.log(request.body);
     client
     .query(
         'INSERT INTO "TASK" ("TASK_NAME", "TASK_DEADLINE", "TASK_DESCRIPTION", "TASK_COMPLETE") VALUES ($1, $2, $3, $4)',
-        [request.body.name, request.body.deadline, request.body.description, request.body.complete]
+        [request.body.name, request.body.deadline, request.body.description, request.body.complete ?? "false"]
     )
     .then((result: pg.QueryResult): void => {
-        response.end();
+        response.redirect("/");
     })
     .catch(console.error);
 });

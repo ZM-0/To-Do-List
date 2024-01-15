@@ -11,13 +11,13 @@
       <h1>Create Task</h1>
     </header>
     <main>
-      <form action="" method="POST">
+      <form action="/api/tasks" method="POST">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required aria-required="true">
         <label for="deadline">Deadline:</label>
         <input type="datetime-local" id="deadline" name="deadline" required aria-required="true">
         <label for="description">Description:</label>
-        <textarea id="description"></textarea>
+        <textarea id="description" name="description"></textarea>
         <input type="checkbox" id="complete" name="complete" value="true">
         <label for="complete">Complete</label>
         <a href="/">Cancel</a>
