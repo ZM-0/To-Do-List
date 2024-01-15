@@ -35,8 +35,14 @@ appliation.use((request, response, next) => {
 // ====================================================================================================
 // Front End Files
 // HTML, CSS, and image files
-appliation.get(["/", "/images/list-icon.png"], (request, response) => {
-    const filename = "/" === request.path ? "index.html" : request.path;
+appliation.get(["/", "/create", "/images/list-icon.png"], (request, response) => {
+    const filename = (function () {
+        switch (request.path) {
+            case "/": return "index.html";
+            case "/create": return "/create.html";
+            default: return request.path;
+        }
+    })();
     response.sendFile(path.join(directory, "../source", filename));
 });
 // JavaScript files

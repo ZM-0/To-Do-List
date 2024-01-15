@@ -1,14 +1,21 @@
 "use strict";
-const MONTHS = [
-    "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
-];
 const taskList = document.querySelector("ul");
 const taskCount = document.querySelector("header h2");
 // ====================================================================================================
 // Task HTML Generation
+const MONTHS = [
+    "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+];
+/**
+ * Formats a task deadline.
+ * @param deadline The deadline date and time.
+ * @returns The deadline in the format dd mmmm, hh:mm AM/PM.
+ */
 const getFormattedDeadline = function (deadline) {
-    const hours = 0 === deadline.getHours() % 12 ? 12 : deadline.getHours() % 12;
-    return `${deadline.getDate()} ${MONTHS[deadline.getMonth()]}, ${String(hours)}:${String(deadline.getMinutes()).padStart(2, "0")} ${12 > deadline.getHours() ? "AM" : "PM"}`;
+    const hours = deadline.getHours() % 12 === 0 ? 12 : deadline.getHours() % 12;
+    const minutes = String(deadline.getMinutes()).padStart(2, '0');
+    const period = deadline.getHours() < 12 ? "AM" : "PM";
+    return `${deadline.getDate()} ${MONTHS[deadline.getMonth()]}, ${hours}:${minutes} ${period}`;
 };
 /**
  * Generates HTML for a task and adds it to the DOM.

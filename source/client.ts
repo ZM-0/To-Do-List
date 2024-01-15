@@ -6,21 +6,28 @@ interface Task {
     TASK_COMPLETE: boolean
 }
 
-const MONTHS: string[] = [
-    "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
-];
-
 const taskList: HTMLUListElement = document.querySelector("ul")!;
 const taskCount: HTMLHeadingElement = document.querySelector("header h2")!;
-
 
 
 // ====================================================================================================
 // Task HTML Generation
 
+const MONTHS: string[] = [
+    "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+];
+
+/**
+ * Formats a task deadline.
+ * @param deadline The deadline date and time.
+ * @returns The deadline in the format dd mmmm, hh:mm AM/PM.
+ */
 const getFormattedDeadline = function(deadline: Date): string {
-    const hours: number = 0 === deadline.getHours() % 12 ? 12 : deadline.getHours() % 12;
-    return `${deadline.getDate()} ${MONTHS[deadline.getMonth()]}, ${String(hours)}:${String(deadline.getMinutes()).padStart(2, "0")} ${12 > deadline.getHours() ? "AM" : "PM"}`;
+    const hours: number = deadline.getHours() % 12 === 0 ? 12 : deadline.getHours() % 12;
+    const minutes: string = String(deadline.getMinutes()).padStart(2, '0');
+    const period: string = deadline.getHours() < 12 ? "AM" : "PM";
+
+    return `${deadline.getDate()} ${MONTHS[deadline.getMonth()]}, ${hours}:${minutes} ${period}`;
 }
 
 /**

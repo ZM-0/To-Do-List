@@ -49,8 +49,15 @@ appliation.use((request: express.Request, response: express.Response, next: expr
 // Front End Files
 
 // HTML, CSS, and image files
-appliation.get(["/", "/images/list-icon.png"], (request: express.Request, response: express.Response): void => {
-    const filename: string = "/" === request.path ? "index.html" : request.path;
+appliation.get(["/", "/create", "/images/list-icon.png"], (request: express.Request, response: express.Response): void => {
+    const filename: string = (function(): string {
+        switch (request.path) {
+            case "/": return "index.html";
+            case "/create": return "/create.html";
+            default: return request.path;
+        }
+    })();
+
     response.sendFile(path.join(directory, "../source", filename));
 });
 
