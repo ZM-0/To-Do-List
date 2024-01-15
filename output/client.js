@@ -31,12 +31,25 @@ const addTaskToDOM = function (task) {
         <h2>${task.TASK_NAME}</h2>
         <h3>Deadline: <time datetime="${task.TASK_DEADLINE}">${getFormattedDeadline(deadline)}</time></h3>
         <p>${task.TASK_DESCRIPTION}</p>
-        <button>Complete</button>
+        <button class="complete-button">Is ${task.TASK_COMPLETE ? "Complete" : "Incomplete"}</button>
         <a href="/edit" class="edit-button">Edit</a>
         <button class="delete-button">Delete</button>
       </article>
     `;
     taskList.append(listItem);
+    const completeButton = document.querySelector(`#task-${task.TASK_ID} .complete-button`);
+    completeButton.addEventListener("click", () => {
+        task.TASK_COMPLETE = !task.TASK_COMPLETE;
+        const body = new URLSearchParams();
+        body.append("name", task.TASK_NAME);
+        body.append("deadline", task.TASK_DEADLINE);
+        body.append("description", task.TASK_DESCRIPTION);
+        body.append("complete", task.TASK_COMPLETE ? "true" : "false");
+        fetch(`/api/tasks/${task.TASK_ID}`, { method: "PUT", body })
+            .then((response) => {
+            completeButton.innerText = task.TASK_COMPLETE ? "Is Complete" : "Is Incomplete";
+        });
+    });
     const editButton = document.querySelector(`#task-${task.TASK_ID} .edit-button`);
     editButton.addEventListener("click", () => {
         sessionStorage.setItem("editTaskID", String(task.TASK_ID));
