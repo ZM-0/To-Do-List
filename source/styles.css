@@ -65,18 +65,18 @@ header h1 {
 
 /* Create Button */
 
-.controls a {
+.link-button {
     padding: 0.5em 1em;
     text-decoration: none;
     font-size: 100%;
     color: #000;
 }
 
-.controls a:focus {
+.link-button:focus {
     outline: 2px solid #000;
 }
 
-.controls a:hover {
+.link-button:hover {
     background-color: #EEE;
     cursor: pointer;
 }
@@ -181,7 +181,7 @@ article button:hover {
 
 /* * * * * * * * * * Form * * * * * * * * * */
 
-.edit-heading {
+.form-heading {
     border-bottom: 2px solid #000;
 }
 
@@ -236,4 +236,23 @@ input[type="checkbox"] {
 
 .checkbox-item label {
     margin-left: 0.5rem;
+}
+
+.form-controls button {
+    padding: 0.5em 1em;
+    text-decoration: none;
+    font-family: inherit;
+    font-size: 100%;
+    color: #000;
+    background-color: transparent;
+    border: none;
+}
+
+.form-controls button:focus {
+    outline: 2px solid #000;
+}
+
+.form-controls button:hover {
+    background-color: #EEE;
+    cursor: pointer;
 }
