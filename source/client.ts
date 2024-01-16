@@ -41,11 +41,14 @@ const getFormattedDeadline = function(deadline: Date): string {
  * @param index The task index in allTasks.
  * @returns The DOM element for the complete button.
  */
-const buildCompleteButton = function(index: number): HTMLButtonElement {
+const buildCompleteButton = function(index: number): HTMLDivElement {
+    const completeIcon: HTMLSpanElement = document.createElement("span");
+    completeIcon.classList.add("material-symbols-outlined", "icon-button");
+    completeIcon.innerText = allTasks[index].TASK_COMPLETE ? "check_box" : "check_box_outline_blank";
+
     const completeButton: HTMLButtonElement = document.createElement("button");
     completeButton.classList.add("complete-button");
-    completeButton.innerText = allTasks[index].TASK_COMPLETE ? "Is Complete" : "Is Incomplete";
-
+    completeButton.append(completeIcon);
     completeButton.addEventListener("click", (): void => {
         allTasks[index].TASK_COMPLETE = !allTasks[index].TASK_COMPLETE;
 
@@ -58,28 +61,36 @@ const buildCompleteButton = function(index: number): HTMLButtonElement {
         fetch(`/api/tasks/${allTasks[index].TASK_ID}`, { method: "PUT", body })
         .then((response: Response): void => {
             drawTasks(displayFilter);
-            // completeButton.innerText = allTasks[index].TASK_COMPLETE ? "Is Complete" : "Is Incomplete";
         });
     });
 
-    return completeButton;
+    const container: HTMLDivElement = document.createElement("div");
+    container.classList.add("centre", "complete-container");
+    container.append(completeButton);
+    return container;
 }
 
 /**
  * Builds the edit button for the task display.
  * @param index The task index in allTasks.
- * @returns The DOM element for the edit button.
+ * @returns The DOM element for the edit button container.
  */
-const buildEditButton = function(index: number): HTMLAnchorElement {
+const buildEditButton = function(index: number): HTMLDivElement {
+    const editIcon: HTMLSpanElement = document.createElement("span");
+    editIcon.classList.add("material-symbols-outlined", "icon-button");
+    editIcon.innerText = "edit";
+
     const editButton: HTMLAnchorElement = document.createElement("a");
     editButton.href = "/edit";
-    editButton.innerText = "Edit";
-
+    editButton.append(editIcon);
     editButton.addEventListener("click", (): void => {
         sessionStorage.setItem("editTaskID", String(allTasks[index].TASK_ID));
     });
 
-    return editButton;
+    const container: HTMLDivElement = document.createElement("div");
+    container.classList.add("centre", "edit-container");
+    container.append(editButton);
+    return container;
 }
 
 /**
@@ -87,11 +98,13 @@ const buildEditButton = function(index: number): HTMLAnchorElement {
  * @param index The task index in allTasks.
  * @returns The DOM element for the delete button.
  */
-const buildDeleteButton = function(index: number): HTMLButtonElement {
-    const deleteButton: HTMLButtonElement = document.createElement("button");
-    deleteButton.classList.add("delete-button");
-    deleteButton.innerText = "Delete";
+const buildDeleteButton = function(index: number): HTMLDivElement {
+    const deleteIcon: HTMLSpanElement = document.createElement("span");
+    deleteIcon.classList.add("material-symbols-outlined", "icon-button");
+    deleteIcon.innerText = "delete";
 
+    const deleteButton: HTMLButtonElement = document.createElement("button");
+    deleteButton.append(deleteIcon);
     deleteButton.addEventListener("click", (): void => {
         fetch(`/api/tasks/${allTasks[index].TASK_ID}`, { method: "DELETE" })
         .then((response: Response): void => {
@@ -101,7 +114,10 @@ const buildDeleteButton = function(index: number): HTMLButtonElement {
         });
     });
 
-    return deleteButton;
+    const container: HTMLDivElement = document.createElement("div");
+    container.classList.add("centre", "delete-container");
+    container.append(deleteButton);
+    return container;
 }
 
 /**
@@ -125,7 +141,7 @@ const buildDeadline = function(index: number): HTMLHeadingElement {
     const time: HTMLTimeElement = document.createElement("time");
     time.dateTime = allTasks[index].TASK_DEADLINE;
     time.innerText = getFormattedDeadline(new Date(allTasks[index].TASK_DEADLINE));
-    deadline.append("Deadline: ", time);
+    deadline.append("Due: ", time);
     return deadline;
 }
 

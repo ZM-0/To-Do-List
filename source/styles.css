@@ -19,7 +19,6 @@ body {
 
 header {
     text-align: center;
-    background-color: aliceblue;
 }
 
 header h1 {
@@ -30,47 +29,64 @@ header h1 {
 .controls {
     display: block flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
     border-bottom: 2px solid #000;
 }
 
 .details {
     display: block flex;
-    justify-content: left;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-start;
 }
 
 /* Filter Buttons */
 
 .filters {
     display: inline flex;
+    align-items: center;
 }
 
 .filters button {
-    padding: 1em;
+    padding: 0.5em 1em;
     border: none;
     font-family: inherit;
     font-size: 100%;
-    /* background-color: transparent; */
+    background-color: transparent;
+}
+
+.filters button:focus {
+    outline: 2px solid #000;
 }
 
 .filters button:hover {
+    background-color: #EEE;
     cursor: pointer;
 }
 
 /* Create Button */
 
 .controls a {
-    padding: 1em;
+    padding: 0.5em 1em;
     text-decoration: none;
     font-size: 100%;
+    color: #000;
+}
+
+.controls a:focus {
+    outline: 2px solid #000;
+}
+
+.controls a:hover {
+    background-color: #EEE;
+    cursor: pointer;
 }
 
 /* Details Bar */
 
 .details h2 {
-    margin: 1em;
+    margin: 0.5em 1em;
     font-size: 1em;
+    font-weight: 600;
 }
 
 /* * * * * * * * * * Task Item * * * * * * * * * */
@@ -81,39 +97,86 @@ main ul {
     list-style-type: none;
 }
 
+main ul li {
+    margin: 3em 0;
+}
+
 main ul article {
     display: block grid;
+    padding: 2em;
     grid-template-areas:
         "title       deadline    complete edit"
         "description description complete delete";
     grid-template-rows: repeat(2, 1fr);
     grid-template-columns: 3fr 2fr 1fr 1fr;
-    background-color: deepskyblue;
+    border-radius: 1em;
+    box-shadow: 0 0 1em #AAA;
 }
 
 main ul article h2 {
     grid-area: title;
     margin: 0;
+    /* padding: 1em; */
 }
 
 main ul article h3 {
     grid-area: deadline;
+    font-size: 1em;
 }
 
 main ul article p {
     grid-area: description;
+    margin: 0;
+    /* padding: 1em; */
 }
 
-main ul article .complete-button {
+.centre {
+    display: block flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.complete-container {
     grid-area: complete;
 }
 
-main ul article a {
+.edit-container {
     grid-area: edit;
 }
 
-main ul article .delete-button {
+.delete-container {
     grid-area: delete;
+}
+
+/* Task Item Icon Button */
+
+.icon-button {
+    padding: 0.2em;
+    font-size: 2rem;
+}
+
+.complete-container .icon-button {
+    color: green;
+}
+
+.edit-container .icon-button {
+    color: blue;
+}
+
+.delete-container .icon-button {
+    color: red;
+}
+
+article button {
+    padding: 0;
+    border: none;
+    background-color: transparent;
+}
+
+article button:hover {
+    cursor: pointer;
 }
 
 /* * * * * * * * * * Form * * * * * * * * * */

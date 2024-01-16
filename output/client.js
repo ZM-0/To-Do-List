@@ -27,9 +27,12 @@ const getFormattedDeadline = function (deadline) {
  * @returns The DOM element for the complete button.
  */
 const buildCompleteButton = function (index) {
+    const completeIcon = document.createElement("span");
+    completeIcon.classList.add("material-symbols-outlined", "icon-button");
+    completeIcon.innerText = allTasks[index].TASK_COMPLETE ? "check_box" : "check_box_outline_blank";
     const completeButton = document.createElement("button");
     completeButton.classList.add("complete-button");
-    completeButton.innerText = allTasks[index].TASK_COMPLETE ? "Is Complete" : "Is Incomplete";
+    completeButton.append(completeIcon);
     completeButton.addEventListener("click", () => {
         allTasks[index].TASK_COMPLETE = !allTasks[index].TASK_COMPLETE;
         const body = new URLSearchParams();
@@ -40,24 +43,32 @@ const buildCompleteButton = function (index) {
         fetch(`/api/tasks/${allTasks[index].TASK_ID}`, { method: "PUT", body })
             .then((response) => {
             drawTasks(displayFilter);
-            // completeButton.innerText = allTasks[index].TASK_COMPLETE ? "Is Complete" : "Is Incomplete";
         });
     });
-    return completeButton;
+    const container = document.createElement("div");
+    container.classList.add("centre", "complete-container");
+    container.append(completeButton);
+    return container;
 };
 /**
  * Builds the edit button for the task display.
  * @param index The task index in allTasks.
- * @returns The DOM element for the edit button.
+ * @returns The DOM element for the edit button container.
  */
 const buildEditButton = function (index) {
+    const editIcon = document.createElement("span");
+    editIcon.classList.add("material-symbols-outlined", "icon-button");
+    editIcon.innerText = "edit";
     const editButton = document.createElement("a");
     editButton.href = "/edit";
-    editButton.innerText = "Edit";
+    editButton.append(editIcon);
     editButton.addEventListener("click", () => {
         sessionStorage.setItem("editTaskID", String(allTasks[index].TASK_ID));
     });
-    return editButton;
+    const container = document.createElement("div");
+    container.classList.add("centre", "edit-container");
+    container.append(editButton);
+    return container;
 };
 /**
  * Builds the delete button for the task display.
@@ -65,9 +76,11 @@ const buildEditButton = function (index) {
  * @returns The DOM element for the delete button.
  */
 const buildDeleteButton = function (index) {
+    const deleteIcon = document.createElement("span");
+    deleteIcon.classList.add("material-symbols-outlined", "icon-button");
+    deleteIcon.innerText = "delete";
     const deleteButton = document.createElement("button");
-    deleteButton.classList.add("delete-button");
-    deleteButton.innerText = "Delete";
+    deleteButton.append(deleteIcon);
     deleteButton.addEventListener("click", () => {
         fetch(`/api/tasks/${allTasks[index].TASK_ID}`, { method: "DELETE" })
             .then((response) => {
@@ -76,7 +89,10 @@ const buildDeleteButton = function (index) {
             taskCountDisplay.innerText = `Count: ${allTasks.length}`;
         });
     });
-    return deleteButton;
+    const container = document.createElement("div");
+    container.classList.add("centre", "delete-container");
+    container.append(deleteButton);
+    return container;
 };
 /**
  * Builds the title for the task display.
@@ -98,7 +114,7 @@ const buildDeadline = function (index) {
     const time = document.createElement("time");
     time.dateTime = allTasks[index].TASK_DEADLINE;
     time.innerText = getFormattedDeadline(new Date(allTasks[index].TASK_DEADLINE));
-    deadline.append("Deadline: ", time);
+    deadline.append("Due: ", time);
     return deadline;
 };
 /**
