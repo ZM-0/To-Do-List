@@ -85,8 +85,7 @@ const buildDeleteButton = function (index) {
         fetch(`/api/tasks/${allTasks[index].TASK_ID}`, { method: "DELETE" })
             .then((response) => {
             allTasks.splice(index, 1);
-            document.querySelector(`#task-${allTasks[index].TASK_ID}`)?.remove();
-            taskCountDisplay.innerText = `Count: ${allTasks.length}`;
+            drawTasks(displayFilter);
         });
     });
     const container = document.createElement("div");
@@ -173,12 +172,21 @@ const filterAllButton = document.querySelector("#filter-all");
 const filterCompleteButton = document.querySelector("#filter-complete");
 const filterIncompleteButton = document.querySelector("#filter-incomplete");
 filterAllButton.addEventListener("click", () => {
+    filterAllButton.classList.add("current-filter");
+    filterCompleteButton.classList.remove("current-filter");
+    filterIncompleteButton.classList.remove("current-filter");
     drawTasks("all");
 });
 filterCompleteButton.addEventListener("click", () => {
+    filterAllButton.classList.remove("current-filter");
+    filterCompleteButton.classList.add("current-filter");
+    filterIncompleteButton.classList.remove("current-filter");
     drawTasks("complete");
 });
 filterIncompleteButton.addEventListener("click", () => {
+    filterAllButton.classList.remove("current-filter");
+    filterCompleteButton.classList.remove("current-filter");
+    filterIncompleteButton.classList.add("current-filter");
     drawTasks("incomplete");
 });
 fetch("/api/tasks")

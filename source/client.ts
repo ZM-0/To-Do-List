@@ -109,8 +109,7 @@ const buildDeleteButton = function(index: number): HTMLDivElement {
         fetch(`/api/tasks/${allTasks[index].TASK_ID}`, { method: "DELETE" })
         .then((response: Response): void => {
             allTasks.splice(index, 1);
-            document.querySelector(`#task-${allTasks[index].TASK_ID}`)?.remove();
-            taskCountDisplay.innerText = `Count: ${allTasks.length}`;
+            drawTasks(displayFilter);
         });
     });
 
@@ -216,14 +215,23 @@ const filterCompleteButton: HTMLButtonElement = document.querySelector("#filter-
 const filterIncompleteButton: HTMLButtonElement = document.querySelector("#filter-incomplete")!;
 
 filterAllButton.addEventListener("click", (): void => {
+    filterAllButton.classList.add("current-filter");
+    filterCompleteButton.classList.remove("current-filter");
+    filterIncompleteButton.classList.remove("current-filter");
     drawTasks("all");
 });
 
 filterCompleteButton.addEventListener("click", (): void => {
+    filterAllButton.classList.remove("current-filter");
+    filterCompleteButton.classList.add("current-filter");
+    filterIncompleteButton.classList.remove("current-filter");
     drawTasks("complete");
 });
 
 filterIncompleteButton.addEventListener("click", (): void => {
+    filterAllButton.classList.remove("current-filter");
+    filterCompleteButton.classList.remove("current-filter");
+    filterIncompleteButton.classList.add("current-filter");
     drawTasks("incomplete");
 });
 
