@@ -181,4 +181,59 @@ article button:hover {
 
 /* * * * * * * * * * Form * * * * * * * * * */
 
+.edit-heading {
+    border-bottom: 2px solid #000;
+}
 
+.form-container {
+    display: block flex;
+    justify-content: center;
+    padding: 50px;
+}
+
+form {
+    display: block;
+}
+
+.form-item {
+    margin: 1rem 0;
+}
+
+form label:not(input[type="checkbox"] + label) {
+    display: block;
+}
+
+input:not([type="checkbox"]), textarea {
+    width: 15rem;
+    padding: 0.5rem;
+    font-family: inherit;
+    font-size: 100%;
+}
+
+textarea {
+    height: 10rem;
+    padding: 0.5rem;
+    font-family: inherit;
+    font-size: 100%;
+}
+
+.form-controls {
+    display: block flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.checkbox-item {
+    display: block flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+input[type="checkbox"] {
+    height: 1.5rem;
+    width: 1.5rem;
+}
+
+.checkbox-item label {
+    margin-left: 0.5rem;
+}
