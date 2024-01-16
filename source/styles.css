@@ -75,7 +75,46 @@ header h1 {
 
 /* * * * * * * * * * Task Item * * * * * * * * * */
 
+main ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
 
+main ul article {
+    display: block grid;
+    grid-template-areas:
+        "title       deadline    complete edit"
+        "description description complete delete";
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: 3fr 2fr 1fr 1fr;
+    background-color: deepskyblue;
+}
+
+main ul article h2 {
+    grid-area: title;
+    margin: 0;
+}
+
+main ul article h3 {
+    grid-area: deadline;
+}
+
+main ul article p {
+    grid-area: description;
+}
+
+main ul article .complete-button {
+    grid-area: complete;
+}
+
+main ul article a {
+    grid-area: edit;
+}
+
+main ul article .delete-button {
+    grid-area: delete;
+}
 
 /* * * * * * * * * * Form * * * * * * * * * */
 

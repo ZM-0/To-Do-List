@@ -43,6 +43,7 @@ const getFormattedDeadline = function(deadline: Date): string {
  */
 const buildCompleteButton = function(index: number): HTMLButtonElement {
     const completeButton: HTMLButtonElement = document.createElement("button");
+    completeButton.classList.add("complete-button");
     completeButton.innerText = allTasks[index].TASK_COMPLETE ? "Is Complete" : "Is Incomplete";
 
     completeButton.addEventListener("click", (): void => {
@@ -88,6 +89,7 @@ const buildEditButton = function(index: number): HTMLAnchorElement {
  */
 const buildDeleteButton = function(index: number): HTMLButtonElement {
     const deleteButton: HTMLButtonElement = document.createElement("button");
+    deleteButton.classList.add("delete-button");
     deleteButton.innerText = "Delete";
 
     deleteButton.addEventListener("click", (): void => {

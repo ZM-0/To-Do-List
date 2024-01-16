@@ -28,6 +28,7 @@ const getFormattedDeadline = function (deadline) {
  */
 const buildCompleteButton = function (index) {
     const completeButton = document.createElement("button");
+    completeButton.classList.add("complete-button");
     completeButton.innerText = allTasks[index].TASK_COMPLETE ? "Is Complete" : "Is Incomplete";
     completeButton.addEventListener("click", () => {
         allTasks[index].TASK_COMPLETE = !allTasks[index].TASK_COMPLETE;
@@ -65,6 +66,7 @@ const buildEditButton = function (index) {
  */
 const buildDeleteButton = function (index) {
     const deleteButton = document.createElement("button");
+    deleteButton.classList.add("delete-button");
     deleteButton.innerText = "Delete";
     deleteButton.addEventListener("click", () => {
         fetch(`/api/tasks/${allTasks[index].TASK_ID}`, { method: "DELETE" })
