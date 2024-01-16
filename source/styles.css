@@ -1,0 +1,82 @@
+/* * * * * * * * * * Global * * * * * * * * * */
+
+html {
+    box-sizing: border-box;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+body {
+    margin: 0 10vw;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+/* * * * * * * * * * Homepage * * * * * * * * * */
+
+/* Header Layout */
+
+header {
+    text-align: center;
+    background-color: aliceblue;
+}
+
+header h1 {
+    margin: 0;
+    padding: 2em;
+}
+
+.controls {
+    display: block flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #000;
+}
+
+.details {
+    display: block flex;
+    justify-content: left;
+    align-items: center;
+}
+
+/* Filter Buttons */
+
+.filters {
+    display: inline flex;
+}
+
+.filters button {
+    padding: 1em;
+    border: none;
+    font-family: inherit;
+    font-size: 100%;
+    /* background-color: transparent; */
+}
+
+.filters button:hover {
+    cursor: pointer;
+}
+
+/* Create Button */
+
+.controls a {
+    padding: 1em;
+    text-decoration: none;
+    font-size: 100%;
+}
+
+/* Details Bar */
+
+.details h2 {
+    margin: 1em;
+    font-size: 1em;
+}
+
+/* * * * * * * * * * Task Item * * * * * * * * * */
+
+
+
+/* * * * * * * * * * Form * * * * * * * * * */
+
+

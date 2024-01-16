@@ -11,11 +11,17 @@
   <body>
     <header>
       <h1>To-Do List</h1>
-      <button id="filter-all">All</button>
-      <button id="filter-complete">Complete</button>
-      <button id="filter-incomplete">Incomplete</button>
-      <a href="/create">Create Task</a>
-      <h2>Count: 0</h2>
+      <div class="controls">
+        <div class="filters">
+          <button id="filter-all">All</button>
+          <button id="filter-complete">Complete</button>
+          <button id="filter-incomplete">Incomplete</button>
+        </div>
+        <a href="create">Create Task</a>
+      </div>
+      <div class="details">
+        <h2>Count: 0</h2>
+      </div>
     </header>
     <main>
       <ul></ul>
